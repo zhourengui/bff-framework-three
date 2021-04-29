@@ -1,0 +1,1 @@
+node tests/e2e.test.js

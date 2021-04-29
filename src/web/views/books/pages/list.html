@@ -1,0 +1,17 @@
+{% extends "@layouts/layout.html" %}
+
+{% block title %}图书列表页{% endblock %}
+
+{% block head %}
+<!-- injectcss -->
+{% endblock %}
+
+{% block content %}
+    {% for item in data %}
+        <li>[[item.id]][[item.name]]</li>
+    {% endfor %}
+{% endblock %}
+
+{% block script %}
+<!-- injectjs -->
+{% endblock %}
