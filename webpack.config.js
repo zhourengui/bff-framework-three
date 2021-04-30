@@ -6,6 +6,7 @@ const { merge } = require("webpack-merge")
 const glob = require("glob")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const HtmlAfterPlugin = require("./build/HtmlAfterPlugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 /* 文件遍历 入口 模板 */
 const files = glob.sync("./src/web/views/**/*.entry.js")
@@ -41,9 +42,33 @@ const baseConfig = {
         test: /\.js$/,
         use: ["babel-loader"],
       },
+      {
+        test: /\.css$/,
+        exclude: /node_modules/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+              modules: true,
+            },
+          },
+          {
+            loader: "postcss-loader",
+          },
+        ],
+      },
     ],
   },
-  plugins: [...htmlPlugins, new HtmlAfterPlugin()],
+  plugins: [
+    ...htmlPlugins,
+    new HtmlAfterPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "styles/[name].css",
+      chunkFilename: "styles/[id].css",
+    }),
+  ],
   resolve: {
     alias: {
       "@": path.resolve("./src/web"),

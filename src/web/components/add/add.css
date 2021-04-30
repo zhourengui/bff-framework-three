@@ -1,0 +1,6 @@
+:root {
+  --textColor: green;
+}
+#js-h3-btn {
+  color: var(--textColor);
+}

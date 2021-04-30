@@ -8,6 +8,9 @@ const assetsHelp = (data) => {
     //  lazyload-js 不需要待runtime
     js.push(`<script class="lazyload-js" src="${item}"></script>`)
   }
+  for (let item of data.css) {
+    css.push(`<link href="${item}" rel="stylesheet"></link>`)
+  }
   return {
     js,
     css,
@@ -24,8 +27,9 @@ class HtmlAfterPlugin {
       HtmlWebpackPlugin.getHooks(compilation).beforeAssetTagGeneration.tapAsync(
         pluginName,
         (data, cb) => {
-          const { js } = assetsHelp(data.assets)
+          const { js, css } = assetsHelp(data.assets)
           this.jsArr = js
+          this.cssArr = css
           cb(null, data)
         }
       )
@@ -35,6 +39,7 @@ class HtmlAfterPlugin {
         (data, cb) => {
           let _html = data.html
           _html = _html.replace("<!-- injectjs -->", this.jsArr.join(""))
+          _html = _html.replace("<!-- injectcss -->", this.cssArr.join(""))
           _html = _html.replace(/@layouts/, "../../layouts")
           _html = _html.replace(/@components/g, "../../../components")
           data.html = _html
