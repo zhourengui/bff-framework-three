@@ -43,15 +43,29 @@ const baseConfig = {
         use: ["babel-loader"],
       },
       {
+        enforce: "pre",
+        test: /\.css$/,
+        exclude: /node_modules/,
+        loader: "typed-css-modules-loader",
+        // or in case you want to use parameters:
+        // loader: 'typed-css-modules?outDir=/tmp'
+        // or in case you want to use noEmit:
+        // loader: 'typed-css-modules?noEmit'
+      },
+      {
         test: /\.css$/,
         exclude: /node_modules/,
         use: [
-          MiniCssExtractPlugin.loader,
+          // MiniCssExtractPlugin.loader,
+          "style-loader",
           {
             loader: "css-loader",
             options: {
+              modules: {
+                localIdentName: "[local]",
+              },
               importLoaders: 1,
-              modules: true,
+              // modules: true,
             },
           },
           {
